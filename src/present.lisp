@@ -62,6 +62,18 @@
         (*present-depth-increment* 2))
     (call-next-method)))
 
+(defmethod org-present ((kind (eql :flat)) (o org-node) s)
+  (let ((*present-depth* 0)
+        (*present-depth-increment* 0)
+        (*presented-nodes* (make-hash-table :test 'eq)))
+    (call-next-method)))
+
+(defmethod org-present ((kind (eql :normal)) (o org-node) s)
+  (let ((*present-depth* -2)
+        (*present-depth-increment* 2)
+        (*presented-nodes* (make-hash-table :test 'eq)))
+    (call-next-method)))
+
 (defmethod org-present (kind (o org-node) s)
   (mark-node-presented o)
   (with-slots (status priority title tags section) o
